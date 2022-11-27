@@ -10,6 +10,12 @@
 #include <QMessageBox>
 #include <fstream>
 #include <iostream>
+#include <confirmtable.h>
+
+
+
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -26,7 +32,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    Confirmtable * table=nullptr;
+
+
+
     void Deal_with_wrong();//处理错误
+
 
 };
 #endif // MAINWINDOW_H

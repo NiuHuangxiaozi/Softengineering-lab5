@@ -14,10 +14,17 @@ MainWindow::MainWindow(QWidget *parent)
       QString eq_path = QFileDialog::getExistingDirectory(\
                   this,QStringLiteral("选择路径"),"./");
       ui->line_code->setText(eq_path);
+
     });
 
+    table=new Confirmtable();
+    connect(table,&Confirmtable::back,[=](){
+            table->hide();
+            this->show();
+    });
     connect(ui->btn_start,&QPushButton::clicked,[=](){
         //检错环节
+
         try{
              Deal_with_wrong();
         }
@@ -40,9 +47,10 @@ MainWindow::MainWindow(QWidget *parent)
         }
 
         //进入判断环节
-
-
-
+        this->hide();
+        table->setsourcefile(ui->line_code->text().toStdString());
+        table->set();
+        table->show();
     });
 }
 void MainWindow::Deal_with_wrong()
