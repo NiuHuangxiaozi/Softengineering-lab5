@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <QDebug>
+#include<method.h>
+#include<set>
 class File
 {
 private:
@@ -38,6 +40,7 @@ public:
     virtual void reset(){};//恢复原态
     virtual int get_file_nums(){return 0;};
     virtual void set_next_index(){};
+    virtual ~FileTable(){};
 
 };
 class LinearFileTable:public FileTable
@@ -46,7 +49,13 @@ class LinearFileTable:public FileTable
 private:
     std::vector<File> files;//文件的数据结构
     int index=0;//目前在哪一个文件对
+    std::set<std::string>files_names;//所有文件的名称
+    DSU * dsu=nullptr;
 public:
+    ~LinearFileTable()
+    {
+        delete  dsu;
+    }
     void init_data(std::string eqpath,std::string uneqpath);
     void Get_file_pairs(std::string& s1, std::string& s2,int index);
     void Set_answer(int answer);

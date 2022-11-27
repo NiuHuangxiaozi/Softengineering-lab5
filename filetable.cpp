@@ -28,6 +28,10 @@ void LinearFileTable::init_data(std::string eqpath,std::string uneqpath)
             std::string second_pair=codepair.substr(separation+1,codepair.size()-1);
             onefile=new File(first_pair,second_pair);
             files.push_back(*onefile);
+
+            //统计文件个数
+            files_names.insert(first_pair);
+            files_names.insert(second_pair);
     }
     eqfile.close();
 
@@ -53,8 +57,22 @@ void LinearFileTable::init_data(std::string eqpath,std::string uneqpath)
             std::string second_pair=codepair.substr(separation+1,codepair.size()-1);
             onefile=new File(first_pair,second_pair);
             files.push_back(*onefile);
+
+            //统计文件个数
+            files_names.insert(first_pair);
+            files_names.insert(second_pair);
     }
     uneqfile.close();
+
+
+    //初始化DSU
+    std::vector<std::string> temp;
+    for(std::set<std::string>::iterator i=files_names.begin();
+        i!=files_names.end();i++){
+            temp.push_back(*i);
+    }
+    dsu=new DSU(temp);
+
 }
 void LinearFileTable::Get_file_pairs(std::string& s1, std::string& s2,int index)
 {
@@ -111,14 +129,30 @@ void LinearFileTable::save_file_result(std::string sourcepath)
     file_out_eq.close();
 
 }
-void LinearFileTable::Set_answer(int answer)
+void LinearFileTable::Set_answer(int result)
 {
-    files[index].set_result(answer);
-
+    std::vector<std::string>urls=files[index].Getpair();
+    if(result==1)
+    {
+           dsu->unionElements(urls[0],urls[1]);
+    }
+    files[index].set_result(result);
 }
 void LinearFileTable::set_next_index()
 {
-    index++;
+    for(int i=index+1;i<files.size();i++)
+    {
+        std::vector<std::string> urls=files[i].Getpair();
+        if(dsu->isConnected(urls[0], urls[1])){
+               files[i].set_result(1);
+               continue;
+        }
+        else
+        {
+            index=i;
+            break;
+        }
+    }
 }
 int LinearFileTable::Get_index()
 {

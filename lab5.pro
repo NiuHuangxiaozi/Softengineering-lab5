@@ -12,12 +12,14 @@ SOURCES += \
     confirmtable.cpp \
     filetable.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    method.cpp
 
 HEADERS += \
     confirmtable.h \
     filetable.h \
-    mainwindow.h
+    mainwindow.h \
+    method.h
 
 FORMS += \
     confirmtable.ui \
