@@ -29,8 +29,10 @@ Confirmtable::Confirmtable(QWidget *parent) :
 
                 //qDebug()<<"The next index is "<<nextindex;
 
-                ui->codetextone->clear();
-                ui->codetexttwo->clear();
+                leftshow->clear();
+                rightshow->clear();
+                code_one_lines.clear();
+                code_two_lines.clear();
                 show_files(nextindex);
 
 
@@ -90,6 +92,20 @@ Confirmtable::Confirmtable(QWidget *parent) :
              QMessageBox::Yes);
          }
     });
+
+
+
+    //
+    leftshow=new CodeEditor(this);
+    rightshow=new CodeEditor(this);
+
+    leftshow->setGeometry(30,50,470,700);
+    rightshow->setGeometry(530,50,470,700);
+
+    QFont f;
+    f.setPointSize(15);
+    leftshow->setFont(f);
+    rightshow->setFont(f);
 }
 
 Confirmtable::~Confirmtable()
@@ -100,8 +116,8 @@ void Confirmtable::reset()
 {
     ui->label->clear();
     ui->result->clear();
-    ui->codetextone->clear();
-    ui->codetexttwo->clear();
+    leftshow->clear();
+    rightshow->clear();
 
     files->reset();
 }
@@ -129,7 +145,7 @@ void Confirmtable::show_files(int index)
     file1=sourcepath_csv+"/"+file1;
     file2=sourcepath_csv+"/"+file2;
 
-    std::string one_line;
+    std::string one_line;std::string two_line;
     qDebug()<<"A"+QString::fromStdString(file1);
 
 
@@ -140,12 +156,6 @@ void Confirmtable::show_files(int index)
         qDebug()<<"cpp1 not open!";
         return;
     }
-    while (std::getline(code_one, one_line))
-    {
-        ui->codetextone->append(QString::fromStdString(one_line));
-    }
-    code_one.close();
-
     std::ifstream code_two;
     code_two.open(file2, std::ios::in);
     if (!code_two.is_open()){
@@ -153,12 +163,99 @@ void Confirmtable::show_files(int index)
         return;
     }
 
-    while (std::getline(code_two, one_line))
+    while (std::getline(code_one, one_line))
     {
-        ui->codetexttwo->append(QString::fromStdString(one_line));
+        if(one_line!="")
+        {
+            //qDebug()<<"input1:"<<QString::fromStdString(one_line);
+            code_one_lines.push_back(one_line);
+        }
     }
+    while (std::getline(code_two, two_line))
+    {
+       if(two_line!="")
+       {
+            //qDebug()<<"input2:"<<QString::fromStdString(two_line);
+            code_two_lines.push_back(two_line);
+       }
+    }
+    code_one.close();
     code_two.close();
+
+    Show_diff();
 }
+void Confirmtable::Show_diff()
+{
+    int indexone=0;
+    int indextwo=0;
+
+    for(;indexone<code_one_lines.size();indexone++)
+    {
+        if(code_one_lines[indexone]==code_two_lines[indextwo])
+        {
+          addline(leftshow,QString::fromStdString(code_one_lines[indexone]),
+                  QColor("black"), QColor("white"));
+          addline(rightshow,QString::fromStdString(code_two_lines[indextwo]),
+                  QColor("black"), QColor("white"));
+          indextwo++;
+        }
+        else
+        {
+            int is_find=false;
+            int find_location=indextwo;
+            for(int i=indextwo;i<code_two_lines.size();i++)
+            {
+                if(code_two_lines[i]==code_one_lines[indexone])
+                {
+                    find_location=i;is_find=true;break;
+                }
+            }
+            if(is_find)
+            {
+                  for(;indextwo<find_location;indextwo++)
+                  {
+                      addline(leftshow," ",QColor("black"), QColor("white"));
+                      addline(rightshow,QString::fromStdString(code_two_lines[indextwo]),
+                              QColor("green"), QColor("white"));
+                  }
+                  addline(leftshow,QString::fromStdString(code_one_lines[indexone]),
+                          QColor("black"), QColor("white"));
+                  addline(rightshow,QString::fromStdString(code_two_lines[indextwo]),
+                          QColor("black"), QColor("white"));
+                  indextwo++;
+            }
+            else//没找到
+            {
+                addline(leftshow,QString::fromStdString(code_one_lines[indexone]),
+                        QColor("red"), QColor("white"));
+                addline(rightshow," ",QColor("black"), QColor("white"));
+            }
+        }
+
+    }
+    for(;indextwo<code_two_lines.size();indextwo++)
+    {
+        addline(rightshow,QString::fromStdString(code_two_lines[indextwo]),
+                QColor("green"), QColor("white"));
+    }
+}
+void Confirmtable::addline(CodeEditor* pt,QString text,QColor fontColor, QColor backColor)
+{
+    QTextCharFormat fmt;
+    //字体色
+    fmt.setForeground(QBrush(fontColor));
+    //fmt.setUnderlineColor("red");
+
+    //背景色
+    fmt.setBackground(QBrush(backColor));
+
+    //文本框使用以上设定
+    pt->setCurrentCharFormat(fmt);
+    //文本框添加文本
+    pt->appendPlainText(text);
+}
+
+
 
 void Confirmtable::set()
 {
