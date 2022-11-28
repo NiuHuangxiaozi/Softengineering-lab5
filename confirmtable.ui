@@ -14,16 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="codetextone">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>50</y>
-      <width>471</width>
-      <height>691</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btn_unknown">
     <property name="geometry">
      <rect>
@@ -102,16 +92,6 @@
      <font>
       <pointsize>20</pointsize>
      </font>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="codetexttwo">
-    <property name="geometry">
-     <rect>
-      <x>540</x>
-      <y>50</y>
-      <width>471</width>
-      <height>691</height>
-     </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label">

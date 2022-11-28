@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <filetable.h>
 #include <QMessageBox>
+#include<codeedit.h>
 namespace Ui {
 class Confirmtable;
 }
@@ -20,6 +21,7 @@ public:
     void setsourcefile(std::string s);
     void set();//初始化一些参数
     void show_files(int index);//展示第几对文件
+    void Show_diff();//展示不同
 private:
     //vars
     Ui::Confirmtable *ui;
@@ -35,8 +37,18 @@ private:
     std::string global_file1;
     std::string global_file2;
 
+
+    //展示的视图
+    CodeEditor *leftshow=nullptr;
+    CodeEditor *rightshow=nullptr;
+
+    //
+    std::vector<std::string>code_one_lines;
+    std::vector<std::string>code_two_lines;
      //funcs
     void reset();
+
+    void addline(CodeEditor* pt,QString text,QColor fontColor, QColor backColor);
 signals:
     void back();
 };
