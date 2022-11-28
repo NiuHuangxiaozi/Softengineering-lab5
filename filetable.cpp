@@ -145,11 +145,13 @@ void LinearFileTable::set_next_index()
         std::vector<std::string> urls=files[i].Getpair();
         if(dsu->isConnected(urls[0], urls[1])){
                files[i].set_result(1);
+               index++;
                continue;
         }
         else
         {
             index=i;
+            qDebug()<<"aaas"<<index;
             break;
         }
     }
