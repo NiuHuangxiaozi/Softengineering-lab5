@@ -146,8 +146,7 @@ void Confirmtable::show_files(int index)
     file2=sourcepath_csv+"/"+file2;
 
     std::string one_line;std::string two_line;
-    qDebug()<<"A"+QString::fromStdString(file1);
-
+    //qDebug()<<"A"+QString::fromStdString(file1);
 
     std::ifstream code_one;
     code_one.open(file1, std::ios::in);
@@ -162,6 +161,7 @@ void Confirmtable::show_files(int index)
         qDebug()<<"cpp2 not open!";
         return;
     }
+
 
     while (std::getline(code_one, one_line))
     {
@@ -193,11 +193,13 @@ void Confirmtable::Show_diff()
     {
         if(code_one_lines[indexone]==code_two_lines[indextwo])
         {
+
           addline(leftshow,QString::fromStdString(code_one_lines[indexone]),
                   QColor("black"), QColor("white"));
           addline(rightshow,QString::fromStdString(code_two_lines[indextwo]),
                   QColor("black"), QColor("white"));
           indextwo++;
+
         }
         else
         {
@@ -259,10 +261,18 @@ void Confirmtable::addline(CodeEditor* pt,QString text,QColor fontColor, QColor 
 
 void Confirmtable::set()
 {
+    try{
     files->init_data(sourcepath+"/equal.csv",sourcepath+"/inequal.csv");
-
-
-
+    }
+    catch(int)
+    {
+        QMessageBox::warning( this, tr("Noticing"), \
+        tr("csv打不开"),\
+        QMessageBox::Yes);
+        reset();
+        emit back();
+        return;
+    }
     //展示第一个要判断的文件对
     show_files(0);
 
@@ -270,6 +280,8 @@ void Confirmtable::set()
     ui->label->setText(QString::number(1)+"/"+QString::number(num));
 
     ui->result->setText("未确认");
+
+    this->show();
 }
 
 

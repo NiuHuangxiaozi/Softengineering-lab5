@@ -10,7 +10,7 @@ void LinearFileTable::init_data(std::string eqpath,std::string uneqpath)
     qDebug()<<QString::fromStdString(eqpath);
     if (!eqfile.is_open())
     {
-        qDebug()<<"csv not open!";
+        throw 1;
         return;
     }
 
@@ -43,6 +43,7 @@ void LinearFileTable::init_data(std::string eqpath,std::string uneqpath)
     if (!uneqfile.is_open())
     {
         qDebug()<<"csv2 not open!";
+        throw 1;
         return;
     }
 

@@ -50,7 +50,6 @@ MainWindow::MainWindow(QWidget *parent)
         this->hide();
         table->setsourcefile(ui->line_code->text().toStdString());
         table->set();
-        table->show();
     });
 }
 void MainWindow::Deal_with_wrong()

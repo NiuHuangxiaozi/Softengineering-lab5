@@ -7,6 +7,7 @@
 #include <QDebug>
 #include<method.h>
 #include<set>
+#include <QMessageBox>
 class File
 {
 private:
