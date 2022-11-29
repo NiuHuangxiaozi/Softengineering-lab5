@@ -6,6 +6,7 @@
 #include <filetable.h>
 #include <QMessageBox>
 #include<codeedit.h>
+#include<highlighttext.h>
 namespace Ui {
 class Confirmtable;
 }
@@ -42,13 +43,16 @@ private:
     CodeEditor *leftshow=nullptr;
     CodeEditor *rightshow=nullptr;
 
+    //语法高亮
+    Highlighttext * leftlight=nullptr;
+    Highlighttext * rightlight=nullptr;
     //
     std::vector<std::string>code_one_lines;
     std::vector<std::string>code_two_lines;
      //funcs
     void reset();
 
-    void addline(CodeEditor* pt,QString text,QColor fontColor, QColor backColor);
+    void addline(CodeEditor* pt,QString text, QColor backColor);
 signals:
     void back();
 };
