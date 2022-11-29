@@ -99,6 +99,9 @@ Confirmtable::Confirmtable(QWidget *parent) :
     leftshow=new CodeEditor(this);
     rightshow=new CodeEditor(this);
 
+    leftlight=new Highlighttext(leftshow->document());
+    rightlight=new Highlighttext(rightshow->document());
+
     leftshow->setGeometry(30,50,470,700);
     rightshow->setGeometry(530,50,470,700);
 
@@ -195,9 +198,9 @@ void Confirmtable::Show_diff()
         {
 
           addline(leftshow,QString::fromStdString(code_one_lines[indexone]),
-                  QColor("black"), QColor("white"));
+                  QColor("white"));
           addline(rightshow,QString::fromStdString(code_two_lines[indextwo]),
-                  QColor("black"), QColor("white"));
+                  QColor("white"));
           indextwo++;
 
         }
@@ -216,21 +219,23 @@ void Confirmtable::Show_diff()
             {
                   for(;indextwo<find_location;indextwo++)
                   {
-                      addline(leftshow," ",QColor("black"), QColor("white"));
+                      addline(leftshow," ",QColor("white"));
                       addline(rightshow,QString::fromStdString(code_two_lines[indextwo]),
-                              QColor("green"), QColor("white"));
+                              QColor("lightgreen"));
                   }
                   addline(leftshow,QString::fromStdString(code_one_lines[indexone]),
-                          QColor("black"), QColor("white"));
+                          QColor("white"));
                   addline(rightshow,QString::fromStdString(code_two_lines[indextwo]),
-                          QColor("black"), QColor("white"));
+                          QColor("white"));
                   indextwo++;
             }
             else//没找到
             {
+                QColor color;
+                color.setRed(250);
                 addline(leftshow,QString::fromStdString(code_one_lines[indexone]),
-                        QColor("red"), QColor("white"));
-                addline(rightshow," ",QColor("black"), QColor("white"));
+                        color);
+                addline(rightshow," ",QColor("white"));
             }
         }
 
@@ -238,14 +243,14 @@ void Confirmtable::Show_diff()
     for(;indextwo<code_two_lines.size();indextwo++)
     {
         addline(rightshow,QString::fromStdString(code_two_lines[indextwo]),
-                QColor("green"), QColor("white"));
+                QColor("lightgreen"));
     }
 }
-void Confirmtable::addline(CodeEditor* pt,QString text,QColor fontColor, QColor backColor)
+void Confirmtable::addline(CodeEditor* pt,QString text, QColor backColor)
 {
     QTextCharFormat fmt;
     //字体色
-    fmt.setForeground(QBrush(fontColor));
+    //fmt.setForeground(QBrush(fontColor));
     //fmt.setUnderlineColor("red");
 
     //背景色
