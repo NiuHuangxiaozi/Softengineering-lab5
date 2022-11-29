@@ -12,6 +12,7 @@ SOURCES += \
     codeedit.cpp \
     confirmtable.cpp \
     filetable.cpp \
+    highlighttext.cpp \
     main.cpp \
     mainwindow.cpp \
     method.cpp
@@ -20,6 +21,7 @@ HEADERS += \
     codeedit.h \
     confirmtable.h \
     filetable.h \
+    highlighttext.h \
     mainwindow.h \
     method.h
 
